@@ -21,9 +21,9 @@ public class AppODataController(ISender sender) : ODataController
         return builder.GetEdmModel();
     }
     [HttpGet("employees")]
-    public async Task<IActionResult> GetAllEmployees(CancellationToken cancellationToken)
+    public async Task<IQueryable<EmployeeGetAllQueryResponse>> GetAllEmployees(CancellationToken cancellationToken)
     {
         var response = await sender.Send(new EmployeeGetAllQuery(), cancellationToken);
-        return Ok(response);
+        return response;
     }
 }

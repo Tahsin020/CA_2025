@@ -1,6 +1,8 @@
 using CA_2025.Application;
 using CA_2025.Infrastructure;
+using CA_2025.WebAPI;
 using CA_2025.WebAPI.Controllers;
+using CA_2025.WebAPI.Modules;
 using Microsoft.AspNetCore.OData;
 using Microsoft.AspNetCore.RateLimiting;
 using Scalar.AspNetCore;
@@ -33,6 +35,8 @@ builder.Services.AddRateLimiter(
     }
     ));
 
+builder.Services.AddExceptionHandler<ExceptionHandler>().AddProblemDetails();
+
 var app = builder.Build();
 
 app.MapOpenApi();
@@ -47,6 +51,10 @@ app.UseCors(
     .AllowAnyMethod()
     .SetIsOriginAllowed(t => true)
     );
+
+app.UseExceptionHandler();
+
+app.RegisterRoutes();
 
 app.MapControllers().RequireRateLimiting("fixed");
 
